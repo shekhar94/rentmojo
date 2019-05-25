@@ -1,0 +1,14 @@
+<div *ngFor="let node of tree">
+    <ul>
+        <li>
+            <span class="text-muted">{{node.data}}</span>
+            <button class="btn text-primary" (click)="addNode(node)">Reply</button>
+            <!-- <button (click)="deleteNode(node)">Delete</button> -->
+            <button class="btn text-secondary" (click)="editNode(node)">Edit</button>
+            <app-node-component [tree]="node.children" *ngIf="node.children"></app-node-component>
+        </li>
+    </ul>
+</div>
+<input *ngIf="editNodePopupVisible" [(ngModel)]="nodeData">
+<button *ngIf="editNodePopupVisible" (click)="updateNode()">Update node</button>
+<app-node-data-form [clickedNode]="clickedNode" (onCreateNode)="onCreateNode($event)" *ngIf="addNodePopupVisible"></app-node-data-form>
