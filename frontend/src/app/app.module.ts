@@ -8,6 +8,8 @@ import { NodeComponentComponent } from './node-component/node-component.componen
 import { NodeDataFormComponent } from './node-data-form/node-data-form.component';
 import { LoginComponent } from './login/login.component';
 import { CommentComponent } from './comment/comment.component';
+import { CommentDataService } from './shared/comment.service';
+import { HttpModule } from '@angular/http';
 
 const appRoutes: Routes = [
   { path: 'comment', component: CommentComponent },
@@ -30,11 +32,12 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
+    HttpModule,
     RouterModule.forRoot(
       appRoutes
     )
   ],
-  providers: [],
+  providers: [CommentDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -8,10 +8,15 @@ const request = require('request');
 const qs = require('querystring');
 const url = require('url');
 const randomString = require('randomstring');
+const db = require('./db');
+const bodyParser = require("body-parser");
+
 
 const port = config.PORT || 3000;
 const redirect_uri = config.HOST + '/redirect';
+let dbConnection;
 
+app.use(bodyParser.json());
 app.use(express.static('views'));
 app.use(
   session({
@@ -21,6 +26,16 @@ app.use(
     saveUninitialized: false
   })
 );
+
+app.all("/*", function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, Content-Length, X-Requested-With"
+  );
+  next();
+});
 
 app.get('/', (req, res, next) => {
   res.sendFile(__dirname + '/index.html');
@@ -39,6 +54,25 @@ app.get('/login', (req, res, next) => {
   res.redirect(githubAuthUrl);
 });
 
+app.post('/saveComments', (req, res, next) => {
+  const comments = req.body.comments;
+  const usrid = req.body.usrid;
+  const findQ = { usrid };
+  const updateQ = { $set: { comments, usrid } };
+  dbConnection.collection('comments').update(findQ, updateQ, { upsert: true }, (err, result) => {
+    if (err) res.json({ status: 'fail', msg: 'Error in updating comment' });
+    else {
+      res.json({ status: 'success', msg: 'Successfully updated comment' });
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log('Server listening at port ' + port);
+  db.connectDb().then(connection => {
+    console.log('db connected successfully');
+    dbConnection = connection;
+  }).catch(err => {
+    console.log(JSON.stringify(err));
+  })
 });

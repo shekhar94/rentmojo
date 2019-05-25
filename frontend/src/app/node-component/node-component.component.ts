@@ -7,15 +7,15 @@ import { Node } from '../node';
   styleUrls: ['./node-component.component.css']
 })
 export class NodeComponentComponent implements OnInit {
-
-  @Input() tree: Node;
-  constructor() {}
-
-  ngOnInit() {}
-  addNodePopupVisible: boolean = false;
-  editNodePopupVisible: boolean = false;
+  addNodePopupVisible = false;
+  editNodePopupVisible = false;
   nodeData: string;
   clickedNode: Node;
+  @Input() tree: Node;
+  constructor() { }
+
+  ngOnInit() { }
+
   addNode(node: Node): void {
     this.addNodePopupVisible = true;
     this.clickedNode = node;
@@ -27,7 +27,7 @@ export class NodeComponentComponent implements OnInit {
   updateNode(): void {
     this.clickedNode.data = this.nodeData;
     this.editNodePopupVisible = false;
-    this.nodeData = "";
+    this.nodeData = '';
   }
   deleteNode(node: Node): void {
     const Parent: any = node.parent;

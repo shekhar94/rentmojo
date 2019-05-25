@@ -9,14 +9,15 @@ import { Node } from '../node';
 export class NodeDataFormComponent implements OnInit {
   @Input() clickedNode: Node;
   @Output() onCreateNode = new EventEmitter<boolean>();
+  node: Node = {
+    data: '',
+    children: [],
+    parent: null
+  };
   constructor() { }
 
   ngOnInit() { }
-  node: Node = {
-    data: "",
-    children: [],
-    parent: null
-  }
+
   createNode(): void {
     this.clickedNode.children.push({
       data: this.node.data,
@@ -24,6 +25,6 @@ export class NodeDataFormComponent implements OnInit {
       parent: this.clickedNode
     });
     this.onCreateNode.emit();
-  };
+  }
 
 }
