@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Node } from '../node';
 import { CommentDataService } from '../shared/comment.service';
-import * as circular from 'circular-json';
 
 @Component({
   selector: 'app-comment',
