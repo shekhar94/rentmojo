@@ -74,12 +74,8 @@ app.get('/user', (req, res) => {
       }
     },
     (error, response, body) => {
+      console.log(`User data: ${JSON.stringify(body)}`);
       res.redirect("http://localhost:4200/comment");
-      // res.send(
-      //   "<p>You're logged in! Here's all your emails on GitHub: </p>" +
-      //   body +
-      //   '<p>Go back to <a href="./">log in page</a>.</p>'
-      // );
     }
   );
 });
