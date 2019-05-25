@@ -1,4 +1,5 @@
 // require('dotenv').config();
+// https://github.com/shekhar94/rentmojo.git
 const config = require('./config');
 const express = require('express');
 const app = express();
@@ -36,48 +37,6 @@ app.get('/login', (req, res, next) => {
       scope: 'user:email'
     });
   res.redirect(githubAuthUrl);
-});
-
-app.all('/redirect', (req, res) => {
-  const code = req.query.code;
-  const returnedState = req.query.state;
-  if (req.session.csrf_string === returnedState) {
-    request.post(
-      {
-        url:
-          'https://github.com/login/oauth/access_token?' +
-          qs.stringify({
-            client_id: config.CLIENT_ID,
-            client_secret: config.CLIENT_SECRET,
-            code: code,
-            redirect_uri: redirect_uri,
-            state: req.session.csrf_string
-          })
-      },
-      (error, response, body) => {
-        req.session.access_token = qs.parse(body).access_token;
-        res.redirect('/user');
-      }
-    );
-  } else {
-    res.redirect('/');
-  }
-});
-
-app.get('/user', (req, res) => {
-  request.get(
-    {
-      url: 'https://api.github.com/user/public_emails',
-      headers: {
-        Authorization: 'token ' + req.session.access_token,
-        'User-Agent': 'Login-App'
-      }
-    },
-    (error, response, body) => {
-      console.log(`User data: ${JSON.stringify(body)}`);
-      res.redirect("http://localhost:4200/comment");
-    }
-  );
 });
 
 app.listen(port, () => {
